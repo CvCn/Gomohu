@@ -24,53 +24,37 @@ public class CvMain
 		frame.setResizable(false);
 		frame.addMouseListener(new MouseListener()
 		{
-			
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
 				w.addStone(e.getPoint());
 			}
-			
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
-				// TODO Auto-generated method stub
-				
 			}
-			
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				// TODO Auto-generated method stub
-				
 			}
-			
 			@Override
 			public void mouseEntered(MouseEvent e)
 			{
-				// TODO Auto-generated method stub
-				 
 			}
 
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				// TODO Auto-generated method stub
-				
 			}
 			
 		});
 		
 		frame.addKeyListener(new KeyListener()
 		{
-			
 			@Override
 			public void keyTyped(KeyEvent e)
 			{
-				// TODO Auto-generated method stub
-				
 			}
-			
 			@Override
 			public void keyReleased(KeyEvent e)
 			{
@@ -85,17 +69,12 @@ public class CvMain
 						w.setState(State.主菜单);
 					}
 				}
-				
 			}
-			
 			@Override
 			public void keyPressed(KeyEvent e)
 			{
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		w.action();
 	}
-
 }

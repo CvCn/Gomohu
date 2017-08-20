@@ -27,7 +27,4 @@ public class GoMoKu implements GoMoKuInter
 	{
 		return this.p.hashCode();
 	}
-	
-
-	
 }

@@ -25,7 +25,6 @@ import com.cv.jishiqi.JiShiQi;
 
 public class Window extends JPanel
 {
-
 	/**
 	 * 五子棋1.0
 	 */
@@ -34,8 +33,11 @@ public class Window extends JPanel
 	 * 面板宽
 	 */
 	public static final int WIDTH = 700;
+	/**
+	 * 计时长度
+	 */
 	private static final int TIME = 30*60*1000;
-	/*
+	/**
 	 * 运行状态
 	 * @author xiaowei
 	 *
@@ -43,10 +45,15 @@ public class Window extends JPanel
 	enum State{
 		开始, 暂停, 主菜单, 结束
 	}
+	/**
+	 * 下棋状态
+	 * @author xiaowei
+	 *
+	 */
 	private enum Ac{
-		黑下, 白下, 黑赢, 白赢
+		黑下, 白下, 黑赢, 白赢, 和棋
 	}
-	/*
+	/**
 	 * 棋子直径
 	 */
 	public static int D =  GoMoKuInter.D;
@@ -62,7 +69,6 @@ public class Window extends JPanel
 			}
 		}
 	}
-	
 	//变量
 	private Set<GoMoKu> set;//所有棋子的集合
 	private State state;//状态
@@ -81,13 +87,12 @@ public class Window extends JPanel
 		state = State.主菜单;
 		jiB = new JiShiQi(-1);
 		jiW = new JiShiQi(-1);
-		strB = "00:00:00";
-		strW = "00:00:00";
+		strB = "00:00";
+		strW = "00:00";
 		b = false;
 		w = false;
 		timer = new Timer(1000, new ActionListener()
 		{
-			
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
@@ -96,7 +101,6 @@ public class Window extends JPanel
 			}
 		});
 	}
-	
 	public void f5(){
 		go = Ac.黑下;
 		set.clear();
@@ -123,10 +127,11 @@ public class Window extends JPanel
 		}else if(state == State.开始){
 			g.setColor(new Color(0, 0, 0));
 			g.setFont(new Font("微软雅黑", Font.BOLD, 30));
-			g.drawString(strB+ "         " + "五子棋" + "        " + strW, 100, 30);
+			g.drawString(strB+ "              " + "五子棋" + "              " + strW, 100, 30);
 			if(go == Ac.黑下){
 				g.setColor(new Color(0, 0, 0));
 				g.fillOval(50, 5, 30, 30);
+				if(set.size()>=1)
 				b = true;
 			}else if(go == Ac.白下){
 				g.setColor(new Color(255, 255, 255));
@@ -137,14 +142,7 @@ public class Window extends JPanel
 			g.drawOval(50, 5, 30, 30);
 			g.setColor(new Color(255, 255, 255));
 			g.drawOval(WIDTH-70, 5, 30, 30);
-			if(jiW.getTime() <= 0){
-				go = Ac.黑赢;
-				state = State.结束;
-			}else if(jiB.getTime() <= 0){
-				go = Ac.白赢;
-				state = State.结束;
-			}
-			
+			nullEnd();
 			grid(g);
 			stone(g);
 		}
@@ -168,10 +166,10 @@ public class Window extends JPanel
 				g.setColor(new Color(255, 255, 255));
 				g.drawString("白棋赢！", 200, 30);
 				g.drawString("Enter->", 385, 30);
-			}else{
+			}else if(go == Ac.和棋){
 				g.setColor(new Color(255, 0, 0));
 				g.setFont(new Font("微软雅黑", Font.BOLD, 30));
-				g.drawString("未知错误！", 200, 30);
+				g.drawString("和棋！", 200, 30);
 				g.drawString("Enter->", 385, 30);
 			}
 			timer.stop();
@@ -190,7 +188,11 @@ public class Window extends JPanel
 		this.state = s;
 		
 	}
-	//画网格
+	/**
+	 * 画网格
+	 * @param g 
+	 * @author xiaowei
+	 */
 	private void grid(Graphics g){
 		g.setColor(new Color(0, 0, 0));
 		for (int i = D; i < WIDTH; i += D)
@@ -203,7 +205,11 @@ public class Window extends JPanel
 		}
 		g.fillOval(WIDTH/2-5, WIDTH/2-5, 10, 10);
 	}
-	//画棋子
+	/**
+	 * 画棋子
+	 * @param g
+	 * @author xiaowei
+	 */
 	private void stone(Graphics g){
 			for(Iterator<GoMoKu> it = set.iterator(); it.hasNext(); ){
 				GoMoKu go = it.next();
@@ -251,16 +257,16 @@ public class Window extends JPanel
 							b = true;
 							w = false;
 						}
-
 					}
 				}
+				full();
 			}
 		} catch (NullPointerException e)
 		{
 			e.printStackTrace();
 		}
 	}
-	/*
+	/**
 	 * 判断谁赢
 	 * </p>
 	 * 两个while循环判断四个方向上的棋子是否有全是黑或白一方的棋子，
@@ -302,9 +308,7 @@ public class Window extends JPanel
 			}
 		}
 		return false;
-
 	}
-	
 	/**
 	 * 运行
 	 * 
@@ -318,7 +322,7 @@ public class Window extends JPanel
 	/*
 	 * 工具类
 	 */
-	/*
+	/**
 	 * 点击误差判断，始终下在棋盘交点上
 	 * @param p 鼠标传过来的位置
 	 * @return
@@ -333,7 +337,7 @@ public class Window extends JPanel
 		}
 		return null;
 	}
-	/*
+	/**
 	 * 传入一个棋子的坐标，判断它是黑棋还是白棋
 	 * @param g
 	 * @return
@@ -354,7 +358,35 @@ public class Window extends JPanel
 		}
 		return -1;
 	}
-
-
-	
+	/**
+	 * 和棋情况
+	 * 
+	 * @author xiaowei
+	 */
+	private void full(){
+		if(set.size() >= list.size()){
+			if(jiB.getTime()>jiW.getTime()){
+				go = Ac.黑赢;
+			}else if(jiB.getTime()<jiW.getTime()){
+				go = Ac.白赢;
+			}else if(jiB.getTime() == jiW.getTime()){
+				go = Ac.和棋;
+			}
+			state = State.结束;
+		}
+	}
+	/**
+	 * 时间到
+	 * 
+	 * @author xiaowei
+	 */
+	private void nullEnd(){
+		if(jiB.getTime()<=0){
+			go = Ac.白赢;
+			state = State.结束;
+		}else if(jiW.getTime()<=0){
+			go = Ac.黑赢;
+			state = State.结束;
+		}
+	}
 }
